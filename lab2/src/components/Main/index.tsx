@@ -1,9 +1,24 @@
+import { useState } from 'react'
+
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 
 export default function Main() {
+  const [elements, setElements] = useState('')
+  const [initArray, setInitArray] = useState('')
+
+  const handleGenerate = () => {
+    const numElements = parseInt(elements, 10)
+    if (!isNaN(numElements) && numElements > 0) {
+      const array = Array.from({ length: numElements }, () =>
+        Math.floor(Math.random() * 100)
+      )
+      setInitArray(array.join(', '))
+    }
+  }
+
   return (
     <main className="flex h-screen flex-col gap-5 p-5">
       <h1 className="mb-2 text-2xl font-bold">Сортування виборy</h1>
@@ -11,8 +26,15 @@ export default function Main() {
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="elements">Кількість елементів</Label>
         <div className="flex gap-2">
-          <Input type="number" id="elements" placeholder="Число" />
-          <Button variant="outline">Згенерувати</Button>
+          <Input
+            type="number"
+            id="elements"
+            placeholder="Число"
+            onChange={(e) => setElements(e.target.value)}
+          />
+          <Button variant="outline" onClick={handleGenerate}>
+            Згенерувати
+          </Button>
         </div>
       </div>
 
@@ -23,6 +45,8 @@ export default function Main() {
             className="h-54 resize-none"
             placeholder="Числа через кому"
             id="init-array"
+            value={initArray}
+            onChange={(e) => setInitArray(e.target.value)}
           />
         </div>
 
