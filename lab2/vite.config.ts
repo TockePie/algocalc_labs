@@ -34,7 +34,8 @@ export default defineConfig({
       // https://vitejs.dev/config/#resolve-alias
       '@': path.resolve(__dirname, 'src'),
       '@electron': path.resolve(__dirname, 'electron'),
-      '@lib': path.resolve(__dirname, 'src/lib')
+      '@lib': path.resolve(__dirname, 'src/lib'),
+      '@ui': path.resolve(__dirname, 'src/components/ui')
     }
   }
 })

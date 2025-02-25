@@ -22,7 +22,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@electron/*": ["./electron/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@ui/*": ["./src/components/ui/*"]
     }
   },
   "include": ["src", "electron", "lib"],
