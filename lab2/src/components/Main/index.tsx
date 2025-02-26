@@ -1,22 +1,18 @@
-import { useState } from 'react'
+import { Button } from '@ui/button'
+import { Input } from '@ui/input'
+import { Label } from '@ui/label'
+import { Textarea } from '@ui/textarea'
 
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
-import { Textarea } from '../ui/textarea'
+import { useElementsContext } from '@/common/elementsContext'
+import generateArray from '@/utils/generate-array'
 
 export default function Main() {
-  const [elements, setElements] = useState('')
-  const [initArray, setInitArray] = useState('')
+  const { elements, setElements, initArray, setInitArray, resultArray } =
+    useElementsContext()
 
   const handleGenerate = () => {
-    const numElements = parseInt(elements, 10)
-    if (!isNaN(numElements) && numElements > 0) {
-      const array = Array.from({ length: numElements }, () =>
-        Math.floor(Math.random() * 100)
-      )
-      setInitArray(array.join(', '))
-    }
+    const numElements = generateArray(parseInt(elements, 10))
+    setInitArray(numElements.join(', '))
   }
 
   return (
@@ -52,7 +48,11 @@ export default function Main() {
 
         <div className="grid w-full gap-1.5">
           <Label htmlFor="result">Відсортований масив</Label>
-          <Textarea className="h-54 resize-none" id="result" />
+          <Textarea
+            className="h-54 resize-none"
+            id="result"
+            value={resultArray}
+          />
         </div>
       </div>
     </main>
