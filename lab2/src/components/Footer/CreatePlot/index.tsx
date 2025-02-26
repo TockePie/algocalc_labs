@@ -66,7 +66,7 @@ export default function CreatePlot() {
                     labels: data.map(([size]) => size),
                     datasets: [
                       {
-                        label: 'Час виконання (мс)',
+                        label: 'Час виконання (розмір масиву/мс)',
                         data: data.map(([, time]) => time),
                         borderColor: 'blue',
                         borderWidth: 2
@@ -82,7 +82,7 @@ export default function CreatePlot() {
                     labels: operationsData.map(([size]) => size),
                     datasets: [
                       {
-                        label: 'Кількість операцій (порівняння + обміни)',
+                        label: 'Кількість операцій (розмір масиву/операції)',
                         data: operationsData.map(([, ops]) => ops),
                         borderColor: 'red',
                         borderWidth: 2

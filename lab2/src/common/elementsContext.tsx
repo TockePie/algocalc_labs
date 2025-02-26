@@ -14,6 +14,8 @@ interface ElementsContextType {
   setInitArray: Dispatch<SetStateAction<string>>
   resultArray: string
   setResultArray: Dispatch<SetStateAction<string>>
+  executionTime: number | null
+  setExecutionTime: Dispatch<SetStateAction<number | null>>
 }
 
 export const ElementsContext = createContext<ElementsContextType | undefined>(
@@ -24,6 +26,7 @@ export const ElementsProvider = ({ children }: { children: ReactNode }) => {
   const [elements, setElements] = useState('')
   const [initArray, setInitArray] = useState('')
   const [resultArray, setResultArray] = useState('')
+  const [executionTime, setExecutionTime] = useState<number | null>(null)
 
   return (
     <ElementsContext.Provider
@@ -33,7 +36,9 @@ export const ElementsProvider = ({ children }: { children: ReactNode }) => {
         initArray,
         setInitArray,
         resultArray,
-        setResultArray
+        setResultArray,
+        executionTime,
+        setExecutionTime
       }}
     >
       {children}

@@ -7,8 +7,14 @@ import { useElementsContext } from '@/common/elementsContext'
 import generateArray from '@/utils/generate-array'
 
 export default function Main() {
-  const { elements, setElements, initArray, setInitArray, resultArray } =
-    useElementsContext()
+  const {
+    elements,
+    setElements,
+    initArray,
+    setInitArray,
+    resultArray,
+    executionTime
+  } = useElementsContext()
 
   const handleGenerate = () => {
     const numElements = generateArray(parseInt(elements, 10))
@@ -18,20 +24,26 @@ export default function Main() {
   return (
     <main className="flex h-screen flex-col gap-5 p-5">
       <h1 className="mb-2 text-2xl font-bold">Сортування виборy</h1>
-
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="elements">Кількість елементів</Label>
-        <div className="flex gap-2">
-          <Input
-            type="number"
-            id="elements"
-            placeholder="Число"
-            onChange={(e) => setElements(e.target.value)}
-          />
-          <Button variant="outline" onClick={handleGenerate}>
-            Згенерувати
-          </Button>
+      <div className="grid grid-cols-2 items-end justify-items-center">
+        <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label htmlFor="elements">Кількість елементів</Label>
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              id="elements"
+              placeholder="Число"
+              onChange={(e) => setElements(e.target.value)}
+            />
+            <Button variant="outline" onClick={handleGenerate}>
+              Згенерувати
+            </Button>
+          </div>
         </div>
+        {executionTime !== null && (
+          <p className="text-sm text-gray-500">
+            Час виконання: {executionTime.toFixed(10)} мс
+          </p>
+        )}
       </div>
 
       <div className="flex h-full max-h-96 gap-x-2">

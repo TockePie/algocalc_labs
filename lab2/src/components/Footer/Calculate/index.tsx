@@ -3,11 +3,15 @@ import { Button } from '@/components/ui/button'
 import { selectionSort } from '@/lib/algorithm'
 
 export default function Calculate() {
-  const { initArray, setResultArray } = useElementsContext()
+  const { initArray, setResultArray, setExecutionTime } = useElementsContext()
 
   const handleGenerate = () => {
-    const result = selectionSort(initArray.split(',').map(Number))
+    const array = initArray.split(',').map(Number)
+    const startTime = performance.now()
+    const result = selectionSort(array)
+    const endTime = performance.now()
     setResultArray(result.join(', '))
+    setExecutionTime(endTime - startTime)
   }
 
   return (
