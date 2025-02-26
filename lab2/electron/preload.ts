@@ -26,5 +26,8 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 contextBridge.exposeInMainWorld('api', {
   showDialog(details: Electron.MessageBoxOptions) {
     ipcRenderer.invoke('show-dialog', details)
+  },
+  saveImage(dataUrl: string) {
+    ipcRenderer.send('save-image', dataUrl)
   }
 })

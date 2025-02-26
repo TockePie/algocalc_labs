@@ -6,6 +6,7 @@ declare global {
         title: string
         message: string
       }) => void
+      saveImage: (dataUrl: string) => void
     }
   }
 }

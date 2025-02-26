@@ -52,6 +52,7 @@ export default function Main() {
             className="h-54 resize-none"
             id="result"
             value={resultArray}
+            readOnly
           />
         </div>
       </div>

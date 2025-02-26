@@ -82,4 +82,19 @@ ipcMain.handle('show-dialog', async (_, details) => {
   })
 })
 
+ipcMain.on('save-image', async (_, dataUrl) => {
+  const window = BrowserWindow.getFocusedWindow()
+  const { filePath } = await dialog.showSaveDialog(window, {
+    title: 'Save Image',
+    filters: [{ name: 'Images', extensions: ['png'] }]
+  })
+
+  if (!filePath) return
+
+  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '')
+  fs.writeFile(filePath, base64Data, 'base64', (err) => {
+    if (err) console.error('Error saving image:', err)
+  })
+})
+
 app.whenReady().then(createWindow)
