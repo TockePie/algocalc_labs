@@ -2,7 +2,7 @@ import Header from './components/Header'
 import FormComp from './components/FormComp'
 import Charts from './components/Charts'
 
-export default function App() {
+const App = () => {
   return (
     <main className="flex flex-col gap-5 p-5">
       <Header />
@@ -11,3 +11,5 @@ export default function App() {
     </main>
   )
 }
+
+export default App
