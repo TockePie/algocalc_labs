@@ -1,10 +1,10 @@
 import { UseFormRegister } from 'react-hook-form'
+import clsx from 'clsx'
 
 import { Input } from '../../ui/input'
 import { Label } from '../../ui/label'
 
 import { SolutionType } from '../../../types/solution'
-import clsx from 'clsx'
 
 type MatrixInputProps = {
   label: string
