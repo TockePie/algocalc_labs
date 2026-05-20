@@ -1,23 +1,20 @@
-import {
-  createContext,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState
-} from 'react'
-
-import { ChartData } from '@/types/chart-data'
+import type { ChartData } from '@/types/chart-data'
+import { createContext, useContext, useState } from 'react'
 
 interface ChartContextProps {
   chartsVisible: boolean
-  setChartsVisible: React.Dispatch<SetStateAction<boolean>>
+  setChartsVisible: React.Dispatch<React.SetStateAction<boolean>>
   chartData: ChartData | null
-  setChartData: React.Dispatch<SetStateAction<ChartData | null>>
+  setChartData: React.Dispatch<React.SetStateAction<ChartData | null>>
 }
 
 const ChartContext = createContext<ChartContextProps | undefined>(undefined)
 
-export default function ChartProvider({ children }: { children: ReactNode }) {
+export default function ChartProvider({
+  children
+}: {
+  children: React.ReactNode
+}) {
   const [chartsVisible, setChartsVisible] = useState(false)
   const [chartData, setChartData] = useState<ChartData | null>(null)
 
