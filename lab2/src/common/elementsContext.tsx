@@ -1,28 +1,25 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState
-} from 'react'
+import { createContext, useContext, useState } from 'react'
 
 interface ElementsContextType {
   elements: string
-  setElements: Dispatch<SetStateAction<string>>
+  setElements: React.Dispatch<React.SetStateAction<string>>
   initArray: string
-  setInitArray: Dispatch<SetStateAction<string>>
+  setInitArray: React.Dispatch<React.SetStateAction<string>>
   resultArray: string
-  setResultArray: Dispatch<SetStateAction<string>>
+  setResultArray: React.Dispatch<React.SetStateAction<string>>
   executionTime: number | null
-  setExecutionTime: Dispatch<SetStateAction<number | null>>
+  setExecutionTime: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 export const ElementsContext = createContext<ElementsContextType | undefined>(
   undefined
 )
 
-export const ElementsProvider = ({ children }: { children: ReactNode }) => {
+export const ElementsProvider = ({
+  children
+}: {
+  children: React.ReactNode
+}) => {
   const [elements, setElements] = useState('')
   const [initArray, setInitArray] = useState('')
   const [resultArray, setResultArray] = useState('')

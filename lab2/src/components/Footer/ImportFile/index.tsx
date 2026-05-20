@@ -14,7 +14,9 @@ export default function ImportFile() {
 
   useEffect(() => {
     if (!filesContent.length) return
-    const content = filesContent[0].content
+
+    const content = filesContent[0].content.trim()
+    if (!content) return
 
     const isValid = content
       .split(',')
