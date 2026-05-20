@@ -1,10 +1,10 @@
-import { PropsWithChildren, ReactNode } from 'react'
+import { type PropsWithChildren } from 'react'
 import { Link, useLocation } from 'react-router'
 import clsx from 'clsx'
 
 interface PathButtonProps {
   path: string
-  children: ReactNode | string
+  children: React.ReactNode | string
 }
 
 function PathButton({ path, children }: PropsWithChildren<PathButtonProps>) {

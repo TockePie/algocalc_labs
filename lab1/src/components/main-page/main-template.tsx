@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useFilePicker } from 'use-file-picker'
 
 import InputField from '@/components/input-field'

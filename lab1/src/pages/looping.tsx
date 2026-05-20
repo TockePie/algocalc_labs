@@ -1,4 +1,4 @@
-import GenericPage, { Input } from '@/components/main-page/main-template'
+import GenericPage, { type Input } from '@/components/main-page/main-template'
 import calculateF from '@/lib/looping-compute'
 
 interface InputProps {
