@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Button } from '@ui/button'
 import { useFilePicker } from 'use-file-picker'
 
@@ -8,26 +7,25 @@ export default function ImportFile() {
   const { openFilePicker, filesContent } = useFilePicker({
     accept: '.txt',
     multiple: false,
-    readAs: 'Text'
+    readAs: 'Text',
+    onFilesSelected: () => {
+      if (!filesContent.length) return
+
+      const content = filesContent[0].content.trim()
+      if (!content) return
+
+      const isValid = content
+        .split(',')
+        .every((item) => !isNaN(Number(item.trim())))
+      if (!isValid) {
+        alert('Помилка\nФайл містить некоректні дані')
+        return
+      }
+
+      setInitArray(content)
+    }
   })
   const { setInitArray } = useElementsContext()
-
-  useEffect(() => {
-    if (!filesContent.length) return
-
-    const content = filesContent[0].content.trim()
-    if (!content) return
-
-    const isValid = content
-      .split(',')
-      .every((item) => !isNaN(Number(item.trim())))
-    if (!isValid) {
-      alert('Помилка\nФайл містить некоректні дані')
-      return
-    }
-
-    setInitArray(content)
-  }, [filesContent, setInitArray])
 
   return (
     <Button variant="ghost" onClick={() => openFilePicker()}>

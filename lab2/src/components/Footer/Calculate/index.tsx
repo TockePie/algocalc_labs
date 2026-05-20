@@ -1,6 +1,7 @@
+import { Button } from '@ui/button'
+
 import { useElementsContext } from '@/common/elementsContext'
-import { Button } from '@/components/ui/button'
-import { selectionSort } from '@/lib/algorithm'
+import selectionSort from '@/lib/algorithm'
 
 export default function Calculate() {
   const { initArray, setResultArray, setExecutionTime } = useElementsContext()
@@ -10,7 +11,7 @@ export default function Calculate() {
     const startTime = performance.now()
     const result = selectionSort(array)
     const endTime = performance.now()
-    setResultArray(result.join(', '))
+    setResultArray(result.sortedArray.join(', '))
     setExecutionTime(endTime - startTime)
   }
 

@@ -13,7 +13,7 @@ import { ScrollArea } from '@ui/scroll-area'
 import { Chart, registerables } from 'chart.js'
 
 import generateArray from '@/utils/generate-array'
-import { measureStats } from '@/utils/measure-stats'
+import measureStats from '@/utils/measure-stats'
 
 type StatResult = {
   size: number
