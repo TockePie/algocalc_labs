@@ -3,7 +3,6 @@ import { Button } from '@ui/button'
 import { useFilePicker } from 'use-file-picker'
 
 import { useElementsContext } from '@/common/elementsContext'
-import showDialog from '@/utils/show-dialog'
 
 export default function ImportFile() {
   const { openFilePicker, filesContent } = useFilePicker({
@@ -21,7 +20,7 @@ export default function ImportFile() {
       .split(',')
       .every((item) => !isNaN(Number(item.trim())))
     if (!isValid) {
-      showDialog('error', 'Помилка', 'Файл містить некоректні дані')
+      alert('Помилка\nФайл містить некоректні дані')
       return
     }
 
