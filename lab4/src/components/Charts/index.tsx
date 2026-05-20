@@ -1,19 +1,18 @@
 import { useMemo } from 'react'
 import { Line } from 'react-chartjs-2'
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  TooltipItem
+  type TooltipItem
 } from 'chart.js'
 
-import useChartContext from '../../common/hooks/use-chart-context'
-import { getRandomColor } from '../../utils/get-random-color'
+import { useChartContext } from '@/common/chart-context'
 
 ChartJS.register(
   CategoryScale,
@@ -47,39 +46,36 @@ const Charts = () => {
     ]
   }, [formattedPoints])
 
-  const data = useMemo(
-    () => ({
-      datasets: [
-        {
-          label: 'Y = 0',
-          data: zeroLineData,
-          borderColor: '#94a3b8',
-          borderWidth: 1.5,
-          borderDash: [5, 5],
-          pointRadius: 0,
-          tension: 0
-        },
-        {
-          label: 'Function',
-          data: formattedPoints,
-          borderColor: getRandomColor(),
-          borderWidth: 2,
-          tension: 0.1,
-          pointRadius: 0
-        },
-        {
-          label: 'Root',
-          data: chartData?.root ? [chartData.root] : [],
-          backgroundColor: '#ef4444', // red
-          borderColor: '#ef4444',
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          showLine: false
-        }
-      ]
-    }),
-    [formattedPoints, chartData?.root, zeroLineData]
-  )
+  const data = {
+    datasets: [
+      {
+        label: 'Y = 0',
+        data: zeroLineData,
+        borderColor: '#94a3b8',
+        borderWidth: 1.5,
+        borderDash: [5, 5],
+        pointRadius: 0,
+        tension: 0
+      },
+      {
+        label: 'Function',
+        data: formattedPoints,
+        borderColor: '#220cca',
+        borderWidth: 2,
+        tension: 0.1,
+        pointRadius: 0
+      },
+      {
+        label: 'Root',
+        data: chartData?.root ? [chartData.root] : [],
+        backgroundColor: '#ef4444', // red
+        borderColor: '#ef4444',
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        showLine: false
+      }
+    ]
+  }
 
   const options = useMemo(
     () => ({
