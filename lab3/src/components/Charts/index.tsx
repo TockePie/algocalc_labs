@@ -1,7 +1,7 @@
 import { useEffect, useRef, useMemo } from 'react'
 import Chart from 'chart.js/auto'
 
-import { getRandomColor } from '@/utils/getRandomColor'
+import getRandomColor from '@/utils/get-random-color'
 import { useChartContext } from '@/common/context/ChartContext'
 
 export default function Charts() {
