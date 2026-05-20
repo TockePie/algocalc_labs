@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { calculateAiken } from '@/lib/aiken'
+import calculateAiken from '@/lib/aiken'
 import { useChartContext } from '@/common/context/ChartContext'
 
 export default function FormComp() {
@@ -19,7 +19,7 @@ export default function FormComp() {
     }))
   }
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const result = calculateAiken(values.a, values.b, values.n)
@@ -48,12 +48,10 @@ export default function FormComp() {
       <div className="flex gap-5">
         {formFields.map(({ name, placeholder, value }) => (
           <div className="flex flex-col gap-1 font-semibold" key={name}>
-            <label
-              htmlFor={name}
-              className="text-sm text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor={name} className="text-sm text-gray-700">
               {placeholder}
             </label>
+
             <input
               name={name}
               id={name}
@@ -62,7 +60,7 @@ export default function FormComp() {
               value={value}
               onChange={handleChange}
               required
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none dark:border-gray-700 dark:bg-gray-950 dark:text-gray-50"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
             />
           </div>
         ))}
@@ -71,15 +69,16 @@ export default function FormComp() {
       <div className="flex gap-4">
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none dark:bg-gray-500 dark:hover:bg-gray-600"
+          className="inline-flex items-center justify-center rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
         >
           Обчислити
         </button>
+
         {chartsVisible && (
           <button
             type="button"
             onClick={handleClear}
-            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
           >
             Очистити
           </button>

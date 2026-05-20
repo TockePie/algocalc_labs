@@ -2,13 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import App from './App.tsx'
-import ChartProvider from './common/context/ChartContext.tsx'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ChartProvider>
-      <App />
-    </ChartProvider>
+    <App />
   </StrictMode>
 )
