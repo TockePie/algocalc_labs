@@ -1,4 +1,4 @@
-import GenericPage, { type Input } from '@/components/main-page/main-template'
+import GenericPage, { type Input } from '@/components/generic-page'
 import { computeY1 } from '@/lib/linear-compute'
 
 function LinearPage() {
@@ -18,7 +18,6 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення A:',
-    required: true,
     valueAsNumber: true
   },
   {
@@ -26,7 +25,6 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення B:',
-    required: true,
     valueAsNumber: true
   },
   {
@@ -34,7 +32,6 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення X:',
-    required: true,
     valueAsNumber: true
   }
 ]

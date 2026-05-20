@@ -1,4 +1,4 @@
-import GenericPage, { type Input } from '@/components/main-page/main-template'
+import GenericPage, { type Input } from '@/components/generic-page'
 import calculateF from '@/lib/looping-compute'
 
 interface InputProps {
@@ -31,22 +31,19 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення N:',
-    required: true,
     valueAsNumber: true
   },
   {
     name: 'a',
     type: 'string',
     placeholder: 'Масив чисел',
-    labelName: 'Значення A:',
-    required: true
+    labelName: 'Значення A:'
   },
   {
     name: 'b',
     type: 'string',
     placeholder: 'Масив чисел',
-    labelName: 'Значення B:',
-    required: true
+    labelName: 'Значення B:'
   }
 ]
 

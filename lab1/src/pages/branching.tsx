@@ -1,4 +1,4 @@
-import GenericPage, { type Input } from '@/components/main-page/main-template'
+import GenericPage, { type Input } from '@/components/generic-page'
 import computeY from '@/lib/branching-compute'
 
 function BranchingPage() {
@@ -18,7 +18,6 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення I:',
-    required: true,
     valueAsNumber: true
   },
   {
@@ -26,7 +25,6 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення CI:',
-    required: true,
     valueAsNumber: true
   },
   {
@@ -34,7 +32,6 @@ const inputs: Input[] = [
     type: 'number',
     placeholder: 'Число',
     labelName: 'Значення X:',
-    required: true,
     valueAsNumber: true
   }
 ]

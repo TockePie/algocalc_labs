@@ -3,7 +3,7 @@ import LinearPage from '@/pages/linear'
 import LoopingPage from '@/pages/looping'
 
 import { usePage } from './components/page-context'
-import Sidebar from './components/sidebar/sidebar'
+import Sidebar from './components/sidebar'
 
 function App() {
   const { page } = usePage()

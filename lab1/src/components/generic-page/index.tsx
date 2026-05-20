@@ -11,7 +11,6 @@ interface Input {
   type: 'string' | 'number'
   placeholder: string
   labelName: string
-  required: boolean
   valueAsNumber?: boolean
 }
 
@@ -74,7 +73,7 @@ function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
             type={input.type}
             placeholder={input.placeholder}
             labelName={input.labelName}
-            required={input.required}
+            required={true}
             {...register(input.name, { valueAsNumber: input.valueAsNumber })}
           />
         ))}
