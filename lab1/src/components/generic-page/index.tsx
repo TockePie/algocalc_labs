@@ -1,4 +1,4 @@
-import { useActionState, useEffect, useRef } from 'react'
+import { useActionState, useRef } from 'react'
 import { useFilePicker } from 'use-file-picker'
 
 import InputField from '@/components/input-field'
@@ -6,36 +6,80 @@ import type { Input } from '@/types/input'
 import isValidJson from '@/utils/is-json'
 import showDialog from '@/utils/show-dialog'
 
-interface Props {
+interface ComputeError {
+  type: 'info' | 'error'
+  title: string
+  message: string
+}
+
+interface Props<T extends Record<string, unknown>> {
   title: string
   imageSrc: string
   inputs: Input[]
-  computeFunction: (
-    data: any
-  ) => number | { type: 'info' | 'error'; title: string; message: string }
+  computeFunction: (data: T) => number | ComputeError
 }
 
-function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
-  const { openFilePicker, filesContent } = useFilePicker({
+function GenericPage<T extends Record<string, unknown>>({
+  title,
+  imageSrc,
+  inputs,
+  computeFunction
+}: Props<T>) {
+  const { openFilePicker } = useFilePicker({
     accept: '.json',
     multiple: false,
-    readAs: 'Text'
+    readAs: 'Text',
+    onFilesSelected: (data) => {
+      if (!data?.filesContent || data.filesContent.length === 0) return
+
+      const content = data.filesContent[0].content
+
+      if (!isValidJson(content)) {
+        showDialog('error', 'Помилка', 'Файл містить некоректні дані')
+        return
+      }
+
+      try {
+        const jsonData = JSON.parse(content) as T
+        const computedValue = computeFunction(jsonData)
+
+        if (typeof computedValue === 'object') {
+          showDialog(
+            computedValue.type,
+            computedValue.title,
+            computedValue.message
+          )
+          return
+        }
+        showDialog('info', 'Результат', `y = ${computedValue}`)
+      } catch {
+        showDialog('error', 'Помилка', 'Не вдалося розпарсити JSON')
+      }
+    }
   })
+
   const formRef = useRef<HTMLFormElement>(null)
 
-  const formAction = async (prevState: any, formData: FormData) => {
-    const data: Record<string, any> = {}
+  const formAction = async (
+    _prevState: null | ComputeError | number,
+    formData: FormData
+  ) => {
+    const rawParsedData: Record<string, string | number | null> = {}
 
     inputs.forEach((input) => {
       const rawValue = formData.get(input.name)
-      if (input.valueAsNumber) {
-        data[input.name] = rawValue ? Number(rawValue) : NaN
+      if (typeof rawValue === 'string') {
+        rawParsedData[input.name] = input.valueAsNumber
+          ? rawValue
+            ? Number(rawValue)
+            : NaN
+          : rawValue
       } else {
-        data[input.name] = rawValue
+        rawParsedData[input.name] = null
       }
     })
 
-    const computedValue = computeFunction(data)
+    const computedValue = computeFunction(rawParsedData as T)
     if (typeof computedValue === 'object') {
       showDialog(computedValue.type, computedValue.title, computedValue.message)
       return null
@@ -45,20 +89,6 @@ function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
   }
 
   const [, action, isPending] = useActionState(formAction, null)
-
-  useEffect(() => {
-    if (!filesContent.length) return
-    const content = filesContent[0].content
-
-    if (!isValidJson(content)) {
-      showDialog('error', 'Помилка', 'Файл містить некоректні дані')
-      return
-    }
-
-    const jsonData = JSON.parse(content)
-    const computedValue = computeFunction(jsonData)
-    showDialog('info', 'Результат', `y = ${computedValue}`)
-  }, [filesContent, computeFunction])
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 dark:bg-black">
