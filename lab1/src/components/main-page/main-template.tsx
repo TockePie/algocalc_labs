@@ -22,18 +22,11 @@ interface Props {
   computeFunction: (
     data: any
   ) => number | { type: 'info' | 'error'; title: string; message: string }
-  filePickerAccept: string
 }
 
-function GenericPage({
-  title,
-  imageSrc,
-  inputs,
-  computeFunction,
-  filePickerAccept
-}: Props) {
+function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
   const { openFilePicker, filesContent } = useFilePicker({
-    accept: filePickerAccept,
+    accept: '.json',
     multiple: false,
     readAs: 'Text'
   })
