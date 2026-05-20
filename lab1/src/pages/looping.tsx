@@ -1,5 +1,6 @@
-import GenericPage, { type Input } from '@/components/generic-page'
+import GenericPage from '@/components/generic-page'
 import calculateF from '@/lib/looping-compute'
+import type { Input } from '@/types/input'
 
 interface InputProps {
   a: number[]

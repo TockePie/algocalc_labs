@@ -1,18 +1,10 @@
-import { useEffect, useRef } from 'react'
-import { type SubmitHandler, useForm } from 'react-hook-form'
+import { useActionState, useEffect, useRef } from 'react'
 import { useFilePicker } from 'use-file-picker'
 
 import InputField from '@/components/input-field'
+import type { Input } from '@/types/input'
 import isValidJson from '@/utils/is-json'
 import showDialog from '@/utils/show-dialog'
-
-interface Input {
-  name: string
-  type: 'string' | 'number'
-  placeholder: string
-  labelName: string
-  valueAsNumber?: boolean
-}
 
 interface Props {
   title: string
@@ -29,17 +21,30 @@ function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
     multiple: false,
     readAs: 'Text'
   })
-  const { register, handleSubmit } = useForm()
-  const submitRef = useRef<HTMLInputElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const onSubmit: SubmitHandler<any> = (data) => {
+  const formAction = async (prevState: any, formData: FormData) => {
+    const data: Record<string, any> = {}
+
+    inputs.forEach((input) => {
+      const rawValue = formData.get(input.name)
+      if (input.valueAsNumber) {
+        data[input.name] = rawValue ? Number(rawValue) : NaN
+      } else {
+        data[input.name] = rawValue
+      }
+    })
+
     const computedValue = computeFunction(data)
     if (typeof computedValue === 'object') {
       showDialog(computedValue.type, computedValue.title, computedValue.message)
-      return
+      return null
     }
     showDialog('info', 'Результат', `y = ${computedValue}`)
+    return null
   }
+
+  const [, action, isPending] = useActionState(formAction, null)
 
   useEffect(() => {
     if (!filesContent.length) return
@@ -66,18 +71,18 @@ function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
         className="mx-auto max-h-40 w-70 rounded-lg border border-gray-300"
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <form ref={formRef} action={action} className="flex flex-col gap-4">
         {inputs.map((input) => (
           <InputField
             key={input.name}
+            name={input.name}
             type={input.type}
             placeholder={input.placeholder}
             labelName={input.labelName}
-            required={true}
-            {...register(input.name, { valueAsNumber: input.valueAsNumber })}
+            disabled={isPending}
+            required
           />
         ))}
-        <input type="submit" className="hidden" ref={submitRef} />
       </form>
 
       <div className="flex h-full items-end justify-end gap-x-2">
@@ -91,7 +96,7 @@ function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
         <button
           className="rounded-md bg-blue-500 px-3 py-1.5 font-medium text-white hover:bg-blue-700 dark:bg-gray-200 dark:text-black dark:hover:bg-neutral-400"
           type="submit"
-          onClick={() => submitRef.current?.click()}
+          onClick={() => formRef.current?.requestSubmit()}
         >
           Обрахувати
         </button>
@@ -100,5 +105,4 @@ function GenericPage({ title, imageSrc, inputs, computeFunction }: Props) {
   )
 }
 
-export type { Input }
 export default GenericPage

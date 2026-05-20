@@ -1,5 +1,6 @@
-import GenericPage, { type Input } from '@/components/generic-page'
+import GenericPage from '@/components/generic-page'
 import computeY from '@/lib/branching-compute'
+import type { Input } from '@/types/input'
 
 function BranchingPage() {
   return (
