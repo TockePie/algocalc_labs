@@ -3,7 +3,7 @@ import PathButton from './path-button'
 function Sidebar() {
   return (
     <aside
-      className="flex h-screen w-1/4 flex-col justify-between bg-gray-200 p-4 dark:border-r dark:border-stone-800 dark:bg-neutral-950"
+      className="flex h-screen w-74 flex-col justify-between bg-gray-200 p-4 dark:border-r dark:border-stone-800 dark:bg-neutral-950"
       aria-label="Sidebar Navigation"
     >
       <div>

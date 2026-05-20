@@ -4,8 +4,9 @@ const computeY = ({ i, ci, x }: { i: number; ci: number; x: number }) => {
       type: 'error',
       title: 'Помилка',
       message: 'x не може дорівнювати 0'
-    }
+    } as const
   }
+
   if (i % 2 === 1) {
     // i = 2n + 1 (непарне)
     return (

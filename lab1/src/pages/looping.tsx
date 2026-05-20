@@ -3,17 +3,20 @@ import calculateF from '@/lib/looping-compute'
 import type { Input } from '@/types/input'
 
 interface InputProps {
-  a: number[]
-  b: number[]
+  a: string
+  b: string
   n: number
 }
 
 function LoopingPage() {
   const computeFunction = (data: InputProps) => {
-    data.a = data.a.split(',').map(Number)
-    data.b = data.b.split(',').map(Number)
+    const mappedObj = {
+      n: data.n,
+      a: data.a.split(',').map(Number),
+      b: data.b.split(',').map(Number)
+    }
 
-    return calculateF(data)
+    return calculateF(mappedObj)
   }
 
   return (

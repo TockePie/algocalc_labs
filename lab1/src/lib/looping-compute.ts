@@ -1,31 +1,17 @@
-const calculateF = ({
-  n,
-  a,
-  b
-}: {
-  n: number
-  a: number[]
-  b: number[]
-}):
-  | number
-  | {
-      type: 'info' | 'error'
-      title: string
-      message: string
-    } => {
+const calculateF = ({ n, a, b }: { n: number; a: number[]; b: number[] }) => {
   if (n <= 0) {
     return {
       type: 'error',
       title: 'Помилка',
       message: 'n має бути більше 0'
-    }
+    } as const
   }
   if (a.length !== n || b.length !== n) {
     return {
       type: 'error',
       title: 'Помилка',
       message: 'Довжина масивів a та b має бути рівною n'
-    }
+    } as const
   }
 
   let product = 1
