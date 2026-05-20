@@ -1,8 +1,8 @@
-import { useMemo } from 'react'
 import { Line } from 'react-chartjs-2'
 import {
   CategoryScale,
   Chart as ChartJS,
+  type ChartOptions,
   Legend,
   LinearScale,
   LineElement,
@@ -27,24 +27,21 @@ ChartJS.register(
 const Charts = () => {
   const { chartsVisible, chartData } = useChartContext()
 
-  const formattedPoints = useMemo(() => {
-    if (!chartData?.points) return []
+  if (!chartsVisible || !chartData) return null
 
-    return chartData.points.map((point) => ({ x: point.x, y: point.y }))
-  }, [chartData])
+  const points = chartData.points || []
+  const formattedPoints = chartData.points.map((point) => ({
+    x: point.x,
+    y: point.y
+  }))
 
-  const zeroLineData = useMemo(() => {
-    if (!formattedPoints.length) return []
-
-    const xValues = formattedPoints.map((p) => p.x)
-    const minX = Math.min(...xValues)
-    const maxX = Math.max(...xValues)
-
-    return [
-      { x: minX, y: 0 },
-      { x: maxX, y: 0 }
-    ]
-  }, [formattedPoints])
+  const xValues = points.map((p) => p.x)
+  const zeroLineData = points.length
+    ? [
+        { x: Math.min(...xValues), y: 0 },
+        { x: Math.max(...xValues), y: 0 }
+      ]
+    : []
 
   const data = {
     datasets: [
@@ -77,44 +74,39 @@ const Charts = () => {
     ]
   }
 
-  const options = useMemo(
-    () => ({
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          type: 'linear' as const,
-          position: 'bottom',
-          title: {
-            display: true,
-            text: 'X'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Y'
-          }
+  const options: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        type: 'linear' as const,
+        position: 'bottom',
+        title: {
+          display: true,
+          text: 'X'
         }
       },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context: TooltipItem<'line'>) => {
-              const point = context.raw as { x: number; y: number }
-              if (point.y === 0) {
-                return `Root: (${point.x.toFixed(4)}, ${point.y})`
-              }
-              return `(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`
+      y: {
+        title: {
+          display: true,
+          text: 'Y'
+        }
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context: TooltipItem<'line'>) => {
+            const point = context.raw as { x: number; y: number }
+            if (point.y === 0) {
+              return `Root: (${point.x.toFixed(4)}, ${point.y})`
             }
+            return `(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`
           }
         }
       }
-    }),
-    []
-  )
-
-  if (!chartsVisible || !chartData) return null
+    }
+  } as const
 
   return (
     <div className="flex h-[50vh] px-5">

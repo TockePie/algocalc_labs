@@ -1,52 +1,33 @@
-import { useEffect } from 'react'
-import { useForm, type UseFormGetValues } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
+import { useState } from 'react'
 
 import { useChartContext } from '@/common/chart-context'
 import newtonMethod from '@/lib/algorithm'
 import generateChartData from '@/utils/generate-chart-data'
 
-const formFields = [
-  { name: 'a', placeholder: 'Ліва межа' },
-  { name: 'b', placeholder: 'Права межа' },
-  { name: 'e', placeholder: 'Точність (1e^-[число])' }
-]
-
 const FormComp = () => {
   const { chartsVisible, setChartsVisible, setChartData } = useChartContext()
-  const { register, handleSubmit, setValue } = useForm({
-    shouldUseNativeValidation: true,
-    defaultValues: { a: 0, b: 4, e: 6 }
+  const [values, setValues] = useState({
+    a: 0,
+    b: 4,
+    e: 6
   })
-  const [searchParams, setSearchParams] = useSearchParams()
 
-  useEffect(() => {
-    const a = searchParams.get('a')
-    const b = searchParams.get('b')
-    const e = searchParams.get('e')
-
-    if (a) setValue('a', Number(a))
-    if (b) setValue('b', Number(b))
-    if (e) setValue('e', Number(e))
-  }, [searchParams, setValue])
-
-  const updateSearchParams = (data: UseFormGetValues) => {
-    setSearchParams({
-      a: String(data.a),
-      b: String(data.b),
-      e: String(data.e)
-    })
-    return data
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setValues((prev) => ({
+      ...prev,
+      [name]: value === '' ? 0 : Number(value)
+    }))
   }
 
-  const onSubmit = async (data: { a: number; b: number; e: number }) => {
-    const updatedData = updateSearchParams(data)
+  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-    const x0 = (updatedData.a + updatedData.b) / 2
-    const eps = Math.pow(10, -updatedData.e)
+    const x0 = (values.a + values.b) / 2
+    const eps = Math.pow(10, -values.e)
 
     const root = newtonMethod({ x0, eps })
-    const result = generateChartData(updatedData.a, updatedData.b, root)
+    const result = generateChartData(values.a, values.b, root)
 
     if (result) {
       setChartData(result)
@@ -59,23 +40,31 @@ const FormComp = () => {
     setChartData(null)
   }
 
+  const formFields = [
+    { name: 'a', placeholder: 'Ліва межа', value: values.a },
+    { name: 'b', placeholder: 'Права межа', value: values.b },
+    { name: 'e', placeholder: 'Точність (1e^-[число])', value: values.e }
+  ]
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
       className="flex w-full flex-col items-center gap-5"
     >
       <div className="flex gap-5">
-        {formFields.map(({ name, placeholder }) => (
+        {formFields.map(({ name, placeholder, value }) => (
           <div className="flex flex-col gap-1 font-semibold" key={name}>
             <label htmlFor={name} className="text-sm text-gray-700">
               {placeholder}
             </label>
             <input
-              {...register(name as 'a' | 'b' | 'e', { valueAsNumber: true })}
+              name={name}
+              id={name}
               type="number"
               placeholder="Число"
-              key={name}
-              id={`input${name.toUpperCase()}`}
+              value={value}
+              onChange={handleChange}
+              required
               className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
             />
           </div>
