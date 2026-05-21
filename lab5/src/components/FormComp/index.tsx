@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import MatrixInput from './MatrixInput'
 import Solution from './Solution'
 import { aFormFields, bFormFields } from './common/form-fields'
 
-import gaussElimination from '../../lib/algorithm'
-import { type SolutionType } from '../../types/solution'
-import { Button } from '../ui/button'
+import type { SolutionType } from '@/types/solution'
+import gaussElimination from '@/lib/algorithm'
 
 const FormComp = () => {
   const [solution, setSolution] = useState<SolutionType | null>(null)
@@ -49,7 +47,7 @@ const FormComp = () => {
 
       setSolution(gaussElimination(aData, bData))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Calculation error')
+      alert(error instanceof Error ? error.message : 'Calculation error')
     }
   }
 
@@ -79,11 +77,20 @@ const FormComp = () => {
       </div>
 
       <div className="flex gap-4">
-        <Button type="submit">Обчислити</Button>
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
+        >
+          Обчислити
+        </button>
         {isSubmitted && (
-          <Button type="button" variant="secondary" onClick={handleReset}>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
+          >
             Очистити
-          </Button>
+          </button>
         )}
       </div>
 

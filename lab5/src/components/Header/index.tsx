@@ -1,4 +1,4 @@
-const Header = () => {
+export default function Header() {
   return (
     <>
       <h1 className="w-full text-center text-3xl font-extrabold">
@@ -8,5 +8,3 @@ const Header = () => {
     </>
   )
 }
-
-export default Header

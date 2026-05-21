@@ -1,19 +1,40 @@
 import { type UseFormRegister } from 'react-hook-form'
 
-import { Input } from '../../ui/input'
-import { Label } from '../../ui/label'
-
 import type { SolutionType } from '@/types/solution'
-import { cx } from 'class-variance-authority'
 
-type MatrixInputProps = {
+interface Props {
   label: string
   fields: Array<{ name: string }>
   register: UseFormRegister<SolutionType>
   columns?: 1 | 2 | 3 | 4 | 5 | 6
 }
 
-const gridClasses = {
+export default function MatrixInput({
+  label,
+  fields,
+  register,
+  columns = 4
+}: Props) {
+  const InputMap = fields.map(({ name }) => (
+    <input
+      type="number"
+      step="any"
+      placeholder={name}
+      key={name}
+      {...register(name, { valueAsNumber: true })}
+      className="w-16 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
+    />
+  ))
+
+  return (
+    <div className="flex items-center gap-5">
+      <label className="text-sm font-semibold text-gray-900">{label}</label>
+      <div className={`grid gap-2 ${GRID_CLASSES[columns]}`}>{InputMap}</div>
+    </div>
+  )
+}
+
+const GRID_CLASSES = {
   1: 'grid-cols-1',
   2: 'grid-cols-2',
   3: 'grid-cols-3',
@@ -21,30 +42,3 @@ const gridClasses = {
   5: 'grid-cols-5',
   6: 'grid-cols-6'
 }
-
-const MatrixInput = ({
-  label,
-  fields,
-  register,
-  columns = 4
-}: MatrixInputProps) => {
-  const InputMap = fields.map(({ name }) => (
-    <Input
-      type="number"
-      step="any"
-      placeholder={name}
-      key={name}
-      {...register(name, { valueAsNumber: true })}
-      className="w-16"
-    />
-  ))
-
-  return (
-    <div className="flex gap-5">
-      <Label>{label}</Label>
-      <div className={cx(`grid gap-2`, gridClasses[columns])}>{InputMap}</div>
-    </div>
-  )
-}
-
-export default MatrixInput

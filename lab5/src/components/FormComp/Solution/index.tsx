@@ -1,23 +1,24 @@
-import { Info } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '../../ui/alert'
-import { type SolutionType } from '../../../types/solution'
+import type { SolutionType } from '@/types/solution'
 
-const Solution = ({ solution }: { solution: SolutionType | null }) => {
+export default function Solution({
+  solution
+}: {
+  solution: SolutionType | null
+}) {
   if (!solution) return null
 
-  const Results = Object.entries(solution).map(([key, value]) => (
+  const results = Object.entries(solution).map(([key, value]) => (
     <span key={key}>
       {key} = {value.toFixed(2)}
     </span>
   ))
 
   return (
-    <Alert className="w-full max-w-2xl" variant="default">
-      <Info />
-      <AlertTitle>Розв'язок</AlertTitle>
-      <AlertDescription className="flex gap-2">{Results}</AlertDescription>
-    </Alert>
+    <div className="flex w-full max-w-xl flex-col gap-1 rounded-lg border border-gray-200 bg-gray-50 p-4">
+      <h5 className="font-medium">Розв'язок</h5>
+      <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+        {results}
+      </div>
+    </div>
   )
 }
-
-export default Solution
