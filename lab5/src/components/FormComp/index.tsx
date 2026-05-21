@@ -7,7 +7,7 @@ import Solution from './Solution'
 import { aFormFields, bFormFields } from './common/form-fields'
 
 import gaussElimination from '../../lib/algorithm'
-import { SolutionType } from '../../types/solution'
+import { type SolutionType } from '../../types/solution'
 import { Button } from '../ui/button'
 
 const FormComp = () => {

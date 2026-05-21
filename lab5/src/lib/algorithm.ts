@@ -1,11 +1,11 @@
-import * as math from 'mathjs'
+import { lusolve } from 'mathjs'
 
-import convertToMatrix from '../utils/convert-to-matrix'
+import convertToMatrix from '@/utils/convert-to-matrix'
 
-const gaussElimination = (aData: number[], bData: number[]) => {
+export default function gaussElimination(aData: number[], bData: number[]) {
   const matrixA = convertToMatrix(aData)
 
-  const solution = math.lusolve(matrixA, bData) as number[][]
+  const solution = lusolve(matrixA, bData) as number[][]
 
   return {
     x1: solution[0][0],
@@ -14,5 +14,3 @@ const gaussElimination = (aData: number[], bData: number[]) => {
     x4: solution[3][0]
   }
 }
-
-export default gaussElimination

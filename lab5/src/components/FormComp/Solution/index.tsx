@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '../../ui/alert'
-import { SolutionType } from '../../../types/solution'
+import { type SolutionType } from '../../../types/solution'
 
 const Solution = ({ solution }: { solution: SolutionType | null }) => {
   if (!solution) return null

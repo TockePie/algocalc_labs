@@ -1,4 +1,7 @@
-const convertToMatrix = (flatArray: number[], columnsPerRow = 4) => {
+export default function convertToMatrix(
+  flatArray: number[],
+  columnsPerRow = 4
+) {
   const matrix = []
 
   for (let i = 0; i < flatArray.length; i += columnsPerRow) {
@@ -7,5 +10,3 @@ const convertToMatrix = (flatArray: number[], columnsPerRow = 4) => {
 
   return matrix
 }
-
-export default convertToMatrix

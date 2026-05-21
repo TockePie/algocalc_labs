@@ -1,10 +1,10 @@
-import { UseFormRegister } from 'react-hook-form'
-import clsx from 'clsx'
+import { type UseFormRegister } from 'react-hook-form'
 
 import { Input } from '../../ui/input'
 import { Label } from '../../ui/label'
 
-import { SolutionType } from '../../../types/solution'
+import type { SolutionType } from '@/types/solution'
+import { cx } from 'class-variance-authority'
 
 type MatrixInputProps = {
   label: string
@@ -42,7 +42,7 @@ const MatrixInput = ({
   return (
     <div className="flex gap-5">
       <Label>{label}</Label>
-      <div className={clsx(`grid gap-2`, gridClasses[columns])}>{InputMap}</div>
+      <div className={cx(`grid gap-2`, gridClasses[columns])}>{InputMap}</div>
     </div>
   )
 }
