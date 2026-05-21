@@ -1,45 +1,28 @@
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
+import { useState } from 'react'
 
-import { calculateAiken } from '@/lib/aiken'
+import calculateAiken from '@/lib/aiken'
 import { useChartContext } from '@/common/context/ChartContext'
-
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
 
 export default function FormComp() {
   const { chartsVisible, setChartsVisible, setChartData } = useChartContext()
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const { register, handleSubmit, setValue } = useForm({
-    shouldUseNativeValidation: true,
-    defaultValues: {
-      a: searchParams.get('a') ? Number(searchParams.get('a')) : 0,
-      b: searchParams.get('b') ? Number(searchParams.get('b')) : 4,
-      n: searchParams.get('n') ? Number(searchParams.get('n')) : 10
-    }
+  const [values, setValues] = useState({
+    a: 0,
+    b: 4,
+    n: 10
   })
 
-  useEffect(() => {
-    const a = searchParams.get('a')
-    const b = searchParams.get('b')
-    const n = searchParams.get('n')
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setValues((prev) => ({
+      ...prev,
+      [name]: value === '' ? 0 : Number(value)
+    }))
+  }
 
-    if (a) setValue('a', Number(a))
-    if (b) setValue('b', Number(b))
-    if (n) setValue('n', Number(n))
-  }, [searchParams, setValue])
+  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  const onSubmit = async (data: { a: number; b: number; n: number }) => {
-    setSearchParams({
-      a: String(data.a),
-      b: String(data.b),
-      n: String(data.n)
-    })
-
-    const result = calculateAiken(data.a, data.b, data.n)
+    const result = calculateAiken(values.a, values.b, values.n)
     if (result) {
       setChartData(result)
       setChartsVisible(true)
@@ -52,37 +35,53 @@ export default function FormComp() {
   }
 
   const formFields = [
-    { name: 'a', placeholder: 'Значення A' },
-    { name: 'b', placeholder: 'Значення B' },
-    { name: 'n', placeholder: 'Значення N' }
-  ]
+    { name: 'a', placeholder: 'Значення A', value: values.a },
+    { name: 'b', placeholder: 'Значення B', value: values.b },
+    { name: 'n', placeholder: 'Значення N', value: values.n }
+  ] as const
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
       className="flex w-full flex-col items-center gap-5"
     >
       <div className="flex gap-5">
-        {formFields.map(({ name, placeholder }) => (
+        {formFields.map(({ name, placeholder, value }) => (
           <div className="flex flex-col gap-1 font-semibold" key={name}>
-            <Label htmlFor={name}>{placeholder}</Label>
-            <Input
-              {...register(name as 'a' | 'b' | 'n', { valueAsNumber: true })}
+            <label htmlFor={name} className="text-sm text-gray-700">
+              {placeholder}
+            </label>
+
+            <input
+              name={name}
+              id={name}
               type="number"
               placeholder="Число"
-              key={name}
-              id={`input${name.toUpperCase()}`}
+              value={value}
+              onChange={handleChange}
+              required
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
             />
           </div>
         ))}
       </div>
 
       <div className="flex gap-4">
-        <Button type="submit">Обчислити</Button>
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
+        >
+          Обчислити
+        </button>
+
         {chartsVisible && (
-          <Button type="button" variant="secondary" onClick={handleClear}>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none"
+          >
             Очистити
-          </Button>
+          </button>
         )}
       </div>
     </form>

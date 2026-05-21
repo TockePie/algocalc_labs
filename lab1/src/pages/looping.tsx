@@ -1,54 +1,54 @@
-import GenericPage, { Input } from '@/components/main-page/main-template'
+import GenericPage from '@/components/generic-page'
 import calculateF from '@/lib/looping-compute'
+import type { Input } from '@/types/input'
 
 interface InputProps {
-  a: number[]
-  b: number[]
+  a: string
+  b: string
   n: number
 }
 
 function LoopingPage() {
-  const inputs: Input[] = [
-    {
-      name: 'n',
-      type: 'number',
-      placeholder: 'Число',
-      labelName: 'Значення N:',
-      required: true,
-      valueAsNumber: true
-    },
-    {
-      name: 'a',
-      type: 'string',
-      placeholder: 'Масив чисел',
-      labelName: 'Значення A:',
-      required: true
-    },
-    {
-      name: 'b',
-      type: 'string',
-      placeholder: 'Масив чисел',
-      labelName: 'Значення B:',
-      required: true
-    }
-  ]
-
   const computeFunction = (data: InputProps) => {
-    data.a = data.a.split(',').map(Number)
-    data.b = data.b.split(',').map(Number)
-    // implement the looping compute function
-    return calculateF(data)
+    const mappedObj = {
+      n: data.n,
+      a: data.a.split(',').map(Number),
+      b: data.b.split(',').map(Number)
+    }
+
+    return calculateF(mappedObj)
   }
 
   return (
     <GenericPage
       title="Циклічний алгоритм"
-      imageSrc="../../public/looping-example.jpeg"
+      imageSrc="/looping-example.jpeg"
       inputs={inputs}
       computeFunction={computeFunction}
-      filePickerAccept=".json"
     />
   )
 }
+
+const inputs: Input[] = [
+  {
+    name: 'n',
+    type: 'number',
+    placeholder: 'Число',
+    labelName: 'Значення N:',
+    valueAsNumber: true
+  },
+  {
+    name: 'a',
+    type: 'string',
+    placeholder: 'Масив чисел',
+    labelName: 'Значення A:'
+  },
+  {
+    name: 'b',
+    type: 'string',
+    placeholder: 'Масив чисел',
+    labelName: 'Значення B:'
+  }
+]
 
 export default LoopingPage

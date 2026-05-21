@@ -1,4 +1,4 @@
-const calculateAiken = (a: number, b: number, n: number) => {
+export default function calculateAiken(a: number, b: number, n: number) {
   if (
     isNaN(a) ||
     isNaN(b) ||
@@ -38,5 +38,3 @@ const calculateAiken = (a: number, b: number, n: number) => {
 
   return { xValue, y, yPoli, delta }
 }
-
-export { calculateAiken }

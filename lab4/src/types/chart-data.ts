@@ -1,4 +1,4 @@
-interface ChartData {
+export interface ChartData {
   points: {
     x: number
     y: number
@@ -9,5 +9,3 @@ interface ChartData {
   } | null
   function: string
 }
-
-export { type ChartData }

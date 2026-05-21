@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import { Chart, registerables } from 'chart.js'
-
-import { Button } from '@/components/ui/button'
+import { Button } from '@ui/button'
 import {
   Dialog,
   DialogContent,
@@ -10,40 +8,57 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger
-} from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
+} from '@ui/dialog'
+import { ScrollArea } from '@ui/scroll-area'
+import { Chart, registerables } from 'chart.js'
+
 import generateArray from '@/utils/generate-array'
-import { measureStats } from '@/utils/measure-stats'
+import measureStats from '@/utils/measure-stats'
+
+type StatResult = {
+  size: number
+  time: number
+  operations: number
+}
 
 Chart.register(...registerables)
 
 export default function CreatePlot() {
   const chartTimeRef = useRef<Chart<'line'> | null>(null)
-  const [data, setData] = useState<number[][]>([])
   const chartOpsRef = useRef<Chart<'line'> | null>(null)
-  const [operationsData, setOperationsData] = useState<number[][]>([])
+  const [stats, setStats] = useState<StatResult[]>([])
 
   const handleGeneratePlot = () => {
     const sizes = [10, 50, 100, 500, 1000, 5000]
 
     const results = sizes.map((size) => {
       const array = generateArray(size)
-      return measureStats(array)
+      const { time, operations } = measureStats(array)
+      return { size, time, operations }
     })
 
-    setData(sizes.map((size, i) => [size, results[i].time]))
-    setOperationsData(sizes.map((size, i) => [size, results[i].operations]))
+    setStats(results)
   }
 
   const handleExport = () => {
-    if (!chartTimeRef.current || !chartOpsRef.current) return
+    const exports = [
+      { ref: chartTimeRef, name: 'execution-time-chart.png' },
+      { ref: chartOpsRef, name: 'operations-count-chart.png' }
+    ]
 
-    const canvas1 = chartTimeRef.current.canvas.toDataURL('image/png')
-    const canvas2 = chartOpsRef.current.canvas.toDataURL('image/png')
+    exports.forEach(({ ref, name }) => {
+      const canvas = ref.current?.canvas
+      if (!canvas) return
 
-    window.api!.saveImage(canvas1)
-    window.api!.saveImage(canvas2)
+      const link = document.createElement('a')
+      link.href = canvas.toDataURL('image/png')
+      link.download = name
+      link.click()
+    })
   }
+
+  const labels = stats.map((s) => s.size)
+  const chartOptions = { responsive: true, maintainAspectRatio: false }
 
   return (
     <Dialog>
@@ -56,42 +71,46 @@ export default function CreatePlot() {
       <DialogContent className="h-auto w-auto">
         <DialogTitle>Графіки виконання алгоритму</DialogTitle>
 
-        <ScrollArea className="h-56 w-115">
-          <DialogDescription className="h-56 w-115">
-            {data.length > 0 && (
-              <>
-                <Line
-                  ref={chartTimeRef}
-                  data={{
-                    labels: data.map(([size]) => size),
-                    datasets: [
-                      {
-                        label: 'Час виконання (розмір масиву/мс)',
-                        data: data.map(([, time]) => time),
-                        borderColor: 'blue',
-                        borderWidth: 2
-                      }
-                    ]
-                  }}
-                  options={{ responsive: true, maintainAspectRatio: false }}
-                />
+        <ScrollArea className="h-70 w-115">
+          <DialogDescription className="h-70 w-115">
+            {stats.length > 0 && (
+              <div className="space-y-4 p-1">
+                <div className="h-64">
+                  <Line
+                    ref={chartTimeRef}
+                    options={chartOptions}
+                    data={{
+                      labels,
+                      datasets: [
+                        {
+                          label: 'Час виконання (розмір масиву/мс)',
+                          data: stats.map((s) => s.time),
+                          borderColor: 'blue',
+                          borderWidth: 2
+                        }
+                      ]
+                    }}
+                  />
+                </div>
 
-                <Line
-                  ref={chartOpsRef}
-                  data={{
-                    labels: operationsData.map(([size]) => size),
-                    datasets: [
-                      {
-                        label: 'Кількість операцій (розмір масиву/операції)',
-                        data: operationsData.map(([, ops]) => ops),
-                        borderColor: 'red',
-                        borderWidth: 2
-                      }
-                    ]
-                  }}
-                  options={{ responsive: true, maintainAspectRatio: false }}
-                />
-              </>
+                <div className="h-64">
+                  <Line
+                    ref={chartOpsRef}
+                    options={chartOptions}
+                    data={{
+                      labels,
+                      datasets: [
+                        {
+                          label: 'Кількість операцій (розмір масиву/операції)',
+                          data: stats.map((s) => s.operations),
+                          borderColor: 'red',
+                          borderWidth: 2
+                        }
+                      ]
+                    }}
+                  />
+                </div>
+              </div>
             )}
           </DialogDescription>
         </ScrollArea>

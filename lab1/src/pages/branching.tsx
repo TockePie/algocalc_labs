@@ -1,43 +1,40 @@
-import GenericPage, { Input } from '@/components/main-page/main-template'
+import GenericPage from '@/components/generic-page'
 import computeY from '@/lib/branching-compute'
+import type { Input } from '@/types/input'
 
 function BranchingPage() {
-  const inputs: Input[] = [
-    {
-      name: 'i',
-      type: 'number',
-      placeholder: 'Число',
-      labelName: 'Значення I:',
-      required: true,
-      valueAsNumber: true
-    },
-    {
-      name: 'ci',
-      type: 'number',
-      placeholder: 'Число',
-      labelName: 'Значення CI:',
-      required: true,
-      valueAsNumber: true
-    },
-    {
-      name: 'x',
-      type: 'number',
-      placeholder: 'Число',
-      labelName: 'Значення X:',
-      required: true,
-      valueAsNumber: true
-    }
-  ]
-
   return (
     <GenericPage
       title="Розгалуджувальний алгоритм"
-      imageSrc="../../public/branching-example.jpeg"
+      imageSrc="/branching-example.jpeg"
       inputs={inputs}
       computeFunction={computeY}
-      filePickerAccept=".json"
     />
   )
 }
+
+const inputs: Input[] = [
+  {
+    name: 'i',
+    type: 'number',
+    placeholder: 'Число',
+    labelName: 'Значення I:',
+    valueAsNumber: true
+  },
+  {
+    name: 'ci',
+    type: 'number',
+    placeholder: 'Число',
+    labelName: 'Значення CI:',
+    valueAsNumber: true
+  },
+  {
+    name: 'x',
+    type: 'number',
+    placeholder: 'Число',
+    labelName: 'Значення X:',
+    valueAsNumber: true
+  }
+]
 
 export default BranchingPage

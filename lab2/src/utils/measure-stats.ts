@@ -1,13 +1,11 @@
-import { selectionSortWithStats } from '@/lib/selection-sort-stars'
+import selectionSort from '@/lib/algorithm'
 
-function measureStats(arr: number[]) {
+export default function measureStats(arr: number[]) {
   const copy = [...arr]
 
   const startTime = performance.now()
-  const { comparisons, swaps } = selectionSortWithStats(copy)
+  const { comparisons, swaps } = selectionSort(copy)
   const time = performance.now() - startTime
 
   return { time, operations: comparisons + swaps }
 }
-
-export { measureStats }

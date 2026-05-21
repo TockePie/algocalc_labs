@@ -1,5 +1,9 @@
 const showDialog = (type: 'info' | 'error', title: string, message: string) => {
-  window.api.showDialog({ type, title, message })
+  const prefix = type === 'error' ? 'Error' : 'Info'
+
+  const formattedMessage = `${prefix} ${title}\n\n${message}`
+
+  alert(formattedMessage)
 }
 
 export default showDialog

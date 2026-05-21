@@ -30,5 +30,5 @@ const newtonMethod = ({
   return null
 }
 
-export { func, dfunc }
+export { dfunc, func }
 export default newtonMethod
