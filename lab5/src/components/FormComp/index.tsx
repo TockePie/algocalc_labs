@@ -1,79 +1,55 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
-import MatrixInput from './MatrixInput'
-import Solution from './Solution'
-import { aFormFields, bFormFields } from './common/form-fields'
-
-import type { SolutionType } from '@/types/solution'
 import gaussElimination from '@/lib/algorithm'
+import type { SolutionType } from '@/types/solution'
 
-const FormComp = () => {
-  const [solution, setSolution] = useState<SolutionType | null>(null)
+import { aFormFields, bFormFields } from './common/form-fields'
+import MatrixInput from './MatrixInput'
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { isSubmitted }
-  } = useForm<SolutionType>({
-    mode: 'onChange'
-  })
+export default function FormComp({
+  onSetSolution
+}: {
+  onSetSolution: (value: SolutionType | null) => void
+}) {
+  const [isCalculated, setIsCalculated] = useState(false)
 
-  const validateAndFixNaNValues = (data: SolutionType): boolean => {
-    const allFields = [...aFormFields, ...bFormFields]
-    let hasNaN = false
-
-    for (const { name, defaultValue } of allFields) {
-      if (isNaN(data[name])) {
-        hasNaN = true
-        setValue(name, defaultValue)
-      }
-    }
-
-    return hasNaN
-  }
-
-  const onSubmit = async (data: SolutionType) => {
-    if (validateAndFixNaNValues(data)) {
-      setTimeout(() => handleSubmit(onSubmit)(), 0)
-      return
-    }
-
+  const handleAction = (formData: FormData) => {
     try {
-      const aData = aFormFields.map((field) => data[field.name])
-      const bData = bFormFields.map((field) => data[field.name])
+      const getFieldValue = (name: string, defaultValue: number): number => {
+        const rawValue = formData.get(name)
+        if (rawValue === null || rawValue === '') return defaultValue
+        const parsed = Number(rawValue)
+        return isNaN(parsed) ? defaultValue : parsed
+      }
 
-      setSolution(gaussElimination(aData, bData))
+      const aData = aFormFields.map((f) =>
+        getFieldValue(f.name, f.defaultValue)
+      )
+      const bData = bFormFields.map((f) =>
+        getFieldValue(f.name, f.defaultValue)
+      )
+
+      onSetSolution(gaussElimination(aData, bData))
+      setIsCalculated(true)
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Calculation error')
     }
   }
 
   const handleReset = () => {
-    setSolution(null)
-    reset()
+    onSetSolution(null)
+    setIsCalculated(false)
   }
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      action={handleAction}
       className="flex w-full flex-col items-center gap-10"
     >
       <div className="flex w-full items-center justify-center gap-10">
-        <MatrixInput
-          label="Матриця А:"
-          fields={aFormFields}
-          register={register}
-        />
+        <MatrixInput label="Матриця А:" fields={aFormFields} />
 
-        <MatrixInput
-          label="Матриця B:"
-          fields={bFormFields}
-          register={register}
-          columns={1}
-        />
+        <MatrixInput label="Матриця B:" fields={bFormFields} columns={1} />
       </div>
 
       <div className="flex gap-4">
@@ -83,7 +59,7 @@ const FormComp = () => {
         >
           Обчислити
         </button>
-        {isSubmitted && (
+        {isCalculated && (
           <button
             type="button"
             onClick={handleReset}
@@ -93,10 +69,6 @@ const FormComp = () => {
           </button>
         )}
       </div>
-
-      <Solution solution={solution} />
     </form>
   )
 }
-
-export default FormComp

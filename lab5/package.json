@@ -10,10 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "mathjs": "^14.4.0",
+    "ml-matrix": "^6.12.2",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-hook-form": "^7.54.2"
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
